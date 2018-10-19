@@ -77,6 +77,7 @@ export default class Slider extends React.Component {
                 <div className="footer">
                     {range(count).map((item) => (
                         <div
+                            key={item}
                             className={"dot  " + (item === index ? 'selected' : '')}
                             onClick={() => this.setState({ index: item })}
                         ></div>
@@ -91,6 +92,7 @@ Slider.propTypes = {
     initialIndex: PropTypes.number,
     width: PropTypes.string,
     height: PropTypes.string,
+    children: PropTypes.array,
 };
 
 Slider.defaultProps = {
