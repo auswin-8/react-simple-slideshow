@@ -68,7 +68,7 @@ export default class Slider extends React.Component {
                         <img alt="previous" src={arrowLeft} />
                     </div>
                     <div className="element-wrapper">
-                        {this.props.children[index]}
+                        {count !== 0 && this.props.children[index]}
                     </div>
                     <div className="arrow right" onClick={this.next}>
                         <img alt="next" src={arrowRight} />
