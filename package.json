@@ -2,6 +2,10 @@
   "name": "react-image-slider",
   "version": "1.0.0",
   "description": "A simple and easy-to-use image slider",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/riourbana/react-image-slider.git"
+  },
   "main": "build/index.js",
   "peerDependencies": {
     "react": "^15.5.4"
