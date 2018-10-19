@@ -1,7 +1,8 @@
 {
-  "name": "react-image-slider",
+  "name": "react-simple-slideshow",
+  "author": "Lorenzo Carducci",
   "version": "1.0.0",
-  "description": "A simple and easy-to-use image slider",
+  "description": "A simple and easy-to-use image slideshow",
   "repository": {
     "type": "git",
     "url": "git://github.com/riourbana/react-image-slider.git"
@@ -24,7 +25,6 @@
     "url-loader": "^1.1.2",
     "webpack": "^2.6.1"
   },
-  "author": "Lorenzo Carducci",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
