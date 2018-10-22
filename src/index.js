@@ -23,7 +23,7 @@ export default class Slider extends React.Component {
     componentDidMount() {
         const { initialIndex, children } = this.props;
         this.setState({
-            count: children.length,
+            count: children ? children.length : 0,
             index: initialIndex,
         })
     }
