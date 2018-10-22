@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './index.css';
+import shortid from 'shortid';
 import range from 'lodash/range';
+import './index.css';
 
 // Assets
 import arrowLeft from './images/left-arrow.png';
@@ -77,7 +78,7 @@ export default class Slider extends React.Component {
                 <div className="footer">
                     {range(count).map((item) => (
                         <div
-                            key={item}
+                            key={shortid.generate()}
                             className={"dot  " + (item === index ? 'selected' : '')}
                             onClick={() => this.setState({ index: item })}
                         ></div>

@@ -64,11 +64,121 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var randomFromSeed = __webpack_require__(42);
+
+var ORIGINAL = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
+var alphabet;
+var previousSeed;
+
+var shuffled;
+
+function reset() {
+    shuffled = false;
+}
+
+function setCharacters(_alphabet_) {
+    if (!_alphabet_) {
+        if (alphabet !== ORIGINAL) {
+            alphabet = ORIGINAL;
+            reset();
+        }
+        return;
+    }
+
+    if (_alphabet_ === alphabet) {
+        return;
+    }
+
+    if (_alphabet_.length !== ORIGINAL.length) {
+        throw new Error('Custom alphabet for shortid must be ' + ORIGINAL.length + ' unique characters. You submitted ' + _alphabet_.length + ' characters: ' + _alphabet_);
+    }
+
+    var unique = _alphabet_.split('').filter(function(item, ind, arr){
+       return ind !== arr.lastIndexOf(item);
+    });
+
+    if (unique.length) {
+        throw new Error('Custom alphabet for shortid must be ' + ORIGINAL.length + ' unique characters. These characters were not unique: ' + unique.join(', '));
+    }
+
+    alphabet = _alphabet_;
+    reset();
+}
+
+function characters(_alphabet_) {
+    setCharacters(_alphabet_);
+    return alphabet;
+}
+
+function setSeed(seed) {
+    randomFromSeed.seed(seed);
+    if (previousSeed !== seed) {
+        reset();
+        previousSeed = seed;
+    }
+}
+
+function shuffle() {
+    if (!alphabet) {
+        setCharacters(ORIGINAL);
+    }
+
+    var sourceArray = alphabet.split('');
+    var targetArray = [];
+    var r = randomFromSeed.nextValue();
+    var characterIndex;
+
+    while (sourceArray.length > 0) {
+        r = randomFromSeed.nextValue();
+        characterIndex = Math.floor(r * sourceArray.length);
+        targetArray.push(sourceArray.splice(characterIndex, 1)[0]);
+    }
+    return targetArray.join('');
+}
+
+function getShuffled() {
+    if (shuffled) {
+        return shuffled;
+    }
+    shuffled = shuffle();
+    return shuffled;
+}
+
+/**
+ * lookup shuffled letter
+ * @param index
+ * @returns {string}
+ */
+function lookup(index) {
+    var alphabetShuffled = getShuffled();
+    return alphabetShuffled[index];
+}
+
+function get () {
+  return alphabet || ORIGINAL;
+}
+
+module.exports = {
+    get: get,
+    characters: characters,
+    seed: setSeed,
+    lookup: lookup,
+    shuffled: getShuffled
+};
+
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 /**
@@ -105,7 +215,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -295,7 +405,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -314,10 +424,10 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(21);
+var root = __webpack_require__(23);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -326,12 +436,12 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(3),
-    getRawTag = __webpack_require__(17),
-    objectToString = __webpack_require__(20);
+var Symbol = __webpack_require__(4),
+    getRawTag = __webpack_require__(19),
+    objectToString = __webpack_require__(22);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -360,10 +470,10 @@ module.exports = baseGetTag;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var createRange = __webpack_require__(15);
+var createRange = __webpack_require__(17);
 
 /**
  * Creates an array of numbers (positive and/or negative) progressing from
@@ -412,7 +522,7 @@ module.exports = range;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -437,21 +547,30 @@ if (process.env.NODE_ENV !== 'production') {
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(33)(isValidElement, throwOnDirectAccess);
+  module.exports = __webpack_require__(36)(isValidElement, throwOnDirectAccess);
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(32)();
+  module.exports = __webpack_require__(35)();
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 7 */
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+module.exports = __webpack_require__(39);
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(12);
+var content = __webpack_require__(14);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -465,7 +584,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(34)(content, options);
+var update = __webpack_require__(44)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -497,25 +616,25 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAQAAABpN6lAAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAClElEQVR42uydO07DQBCGZ1EOkcRUCI5AiUSDxEWokIBrpOIYcAREBaLkADyC0tFBDw1DkSAEchLb+/A8/k3nSNZ+n1a79npmNjD5bhsEARAAARDguA3ibxGKdpgDHdIuvdFVmBElWMM4+lcUv+JbnrcPPknSe00CeJOn/Nu+eM+VAK7+4DMzX8T3Xs0kyBXd0Pa/iztuVoFafKIZ+ZgEawb/vB24mAOW4k9crAJL8c8TjV/ZAlbjmxewDt+4gPX4pgU0wTcsgCt+Xo9vVkBTfKMCmuObFNAG36CAdvjmBPC4Hb4xAe3xTQnogm9IQDd8MwK64hsR0B3fhIAYfAMCeMxP3fHVC4jFVy4gHl+1gBT4igWkwVcrIBW+UgHp8FUK4FE6fIUC0uKrE5AaX5mA9PiqBOTAVySAR/yYHl+NgFz4SgTkw1chICe+AgF58cULyI0vXEB+fNECSuALFlAGX6yAUvhCBfCwFL5IASXxBQrgIT+UwxcnoDS+MAHl8UUJ6ANfkIB+8MUI6AtfiAAe8H0/+FIEHPeFL0XAZV/4KXqP3OEE97iruXZWagwIGETuJ0H3yyAehPAojJchvA5jQwRbYtgUxbY4Pozg0xg+juLzOAIkECKDICmEyZVUgFBZBEsjXB4JE0iZQdIU0uaQOInUWSRPI31eowD3BRQWCjyX0IhVYEKA+zI6MQrMCHBfSqurAlMC3JfTI3JfULG9AoMC3BdVbafAqAD3hZUXCjyX1m6qwLQA9+X1mygwL8D9ERsrFUzcHLWV85gdFTlD4ZX26aXmj6P4eytJmlqiYMuNgCUKpjLirIo158ftLabDnwMXP/k0Re9DPEAvR26+03WYpjhyM+DkaQiAAAjw3NxPgt8DAL/OmfG0lm3uAAAAAElFTkSuQmCC"
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAQAAABpN6lAAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAJcEhZcwAADdcAAA3XAUIom3gAAAAHdElNRQfiChMPMB/GVozCAAABjUlEQVR42u3dTS5DURjH4XPFDhj4GgnLkJgQe5GwDiPLIFZgyLid+6iY2QMTr0HbaKlRr57evM9/xqA5vydF0mhPKWZmlndNOw8Tu+WkrJdeuW2idlKFxVm8x3D3sV37NIvPP4jP+N4gdmqfaNEAVzG9QbJnQfQjukuw0sJjvP76zl656w7B3IujmLUOPQvmJ7hAcIkAAQIECP4meEaAAAECBEOCrdonQ4AAAQIECJaD4AkBAgQIECBAMCbYrH0yBAgQIFgGgkcECBAgQIAAAQIECCYINmqfDEF1ggcECBAgQIAgIiJ6sVr7ZLUJTmufqzbB9fyP28abpuz/l/xHIPkvweR/BuXLly9f/nhZXhKTPzs/x8vi8uXLly9fvnz5ufOz/KusfPny5U/l53jTlHz58uXLlx8ReT5CQ758+fLlyx/l5/hARfny5cufWJaP1pYvX37S/NyXrKS/ZiduUue7aquUwY+vX8ph81Y7bIFLf91eKXEeH6P8zl242NaVm/vluKylvXLTzMw6ui+36mU0yZ9WawAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0xMC0xOVQxNTo0ODozMSswMjowMF1fItsAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMTAtMTlUMTU6NDg6MzErMDI6MDAsAppnAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAABJRU5ErkJggg=="
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("react");
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -527,25 +646,29 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(10);
+var _react = __webpack_require__(12);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(6);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-__webpack_require__(7);
+var _shortid = __webpack_require__(8);
 
-var _range = __webpack_require__(5);
+var _shortid2 = _interopRequireDefault(_shortid);
+
+var _range = __webpack_require__(6);
 
 var _range2 = _interopRequireDefault(_range);
 
-var _leftArrow = __webpack_require__(8);
+__webpack_require__(9);
+
+var _leftArrow = __webpack_require__(10);
 
 var _leftArrow2 = _interopRequireDefault(_leftArrow);
 
-var _rightArrow = __webpack_require__(9);
+var _rightArrow = __webpack_require__(11);
 
 var _rightArrow2 = _interopRequireDefault(_rightArrow);
 
@@ -586,7 +709,7 @@ var Slider = function (_React$Component) {
                 children = _props.children;
 
             this.setState({
-                count: children.length,
+                count: children ? children.length : 0,
                 index: initialIndex
             });
         }
@@ -665,7 +788,7 @@ var Slider = function (_React$Component) {
                     { className: 'footer' },
                     (0, _range2.default)(count).map(function (item) {
                         return _react2.default.createElement('div', {
-                            key: item,
+                            key: _shortid2.default.generate(),
                             className: "dot  " + (item === index ? 'selected' : ''),
                             onClick: function onClick() {
                                 return _this2.setState({ index: item });
@@ -697,21 +820,21 @@ Slider.defaultProps = {
 };
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+exports = module.exports = __webpack_require__(15)(false);
 // imports
 
 
 // module
-exports.push([module.i, ".wrapper {\r\n    display: flex;\r\n    flex-direction: column;\r\n    width: 500px;\r\n    height: 400px;\r\n}\r\n\r\n.content {\r\n    height: calc(100% - 30px);\r\n    width: 100%;\r\n    position: relative;\r\n    background-color: black;\r\n}\r\n\r\n.element-wrapper {\r\n    height: 100%;\r\n    width: 100%;\r\n}\r\n\r\n.element-wrapper > img {\r\n    object-fit: cover;\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n\r\n.footer {\r\n    height: 30px;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: center;\r\n    align-items: center;\r\n}\r\n\r\n.arrow {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    margin: auto;\r\n    height: 30px;\r\n    width: 30px;\r\n    border-radius: 30px;\r\n    background-color: rgba(0, 0, 0, .4);\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.arrow.left {\r\n    left: 10px;\r\n}\r\n\r\n.arrow.right {\r\n    right: 10px;\r\n}\r\n\r\n.arrow > img {\r\n    height: 50%;\r\n}\r\n\r\n.dot {\r\n    height: 5px;\r\n    width: 5px;\r\n    border-radius: 100%;\r\n    background-color: gray;\r\n    opacity: .6;\r\n    cursor: pointer;\r\n}\r\n\r\n.dot:not(:last-child){\r\n    margin-right: 5px;\r\n}\r\n\r\n.dot.selected {\r\n    opacity: 1;\r\n}\r\n\r\n", ""]);
+exports.push([module.i, ".wrapper {\r\n    display: flex;\r\n    flex-direction: column;\r\n    width: 500px;\r\n    height: 400px;\r\n}\r\n\r\n.content {\r\n    height: calc(100% - 30px);\r\n    width: 100%;\r\n    position: relative;\r\n}\r\n\r\n.element-wrapper {\r\n    height: 100%;\r\n    width: 100%;\r\n}\r\n\r\n.element-wrapper > img {\r\n    object-fit: cover;\r\n    width: 100%;\r\n    height: 100%;\r\n}\r\n\r\n.footer {\r\n    height: 30px;\r\n    width: 100%;\r\n    display: flex;\r\n    flex-direction: row;\r\n    justify-content: center;\r\n    align-items: center;\r\n}\r\n\r\n.arrow {\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    margin: auto;\r\n    height: 30px;\r\n    width: 30px;\r\n    border-radius: 30px;\r\n    background-color: rgba(0, 0, 0, .4);\r\n    cursor: pointer;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.arrow.left {\r\n    left: 10px;\r\n}\r\n\r\n.arrow.right {\r\n    right: 10px;\r\n}\r\n\r\n.arrow > img {\r\n    height: 50%;\r\n}\r\n\r\n.dot {\r\n    height: 5px;\r\n    width: 5px;\r\n    border-radius: 100%;\r\n    background-color: gray;\r\n    opacity: .6;\r\n    cursor: pointer;\r\n}\r\n\r\n.dot:not(:last-child){\r\n    margin-right: 5px;\r\n}\r\n\r\n.dot.selected {\r\n    opacity: 1;\r\n}\r\n\r\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /*
@@ -793,7 +916,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -827,12 +950,12 @@ module.exports = baseRange;
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseRange = __webpack_require__(14),
-    isIterateeCall = __webpack_require__(19),
-    toFinite = __webpack_require__(28);
+var baseRange = __webpack_require__(16),
+    isIterateeCall = __webpack_require__(21),
+    toFinite = __webpack_require__(30);
 
 /**
  * Creates a `_.range` or `_.rangeRight` function.
@@ -863,7 +986,7 @@ module.exports = createRange;
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -871,13 +994,13 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(46)))
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(3);
+var Symbol = __webpack_require__(4);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -926,7 +1049,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -957,13 +1080,13 @@ module.exports = isIndex;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var eq = __webpack_require__(22),
-    isArrayLike = __webpack_require__(23),
-    isIndex = __webpack_require__(18),
-    isObject = __webpack_require__(0);
+var eq = __webpack_require__(24),
+    isArrayLike = __webpack_require__(25),
+    isIndex = __webpack_require__(20),
+    isObject = __webpack_require__(1);
 
 /**
  * Checks if the given arguments are from an iteratee call.
@@ -993,7 +1116,7 @@ module.exports = isIterateeCall;
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -1021,10 +1144,10 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(16);
+var freeGlobal = __webpack_require__(18);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -1036,7 +1159,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /**
@@ -1079,11 +1202,11 @@ module.exports = eq;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(24),
-    isLength = __webpack_require__(25);
+var isFunction = __webpack_require__(26),
+    isLength = __webpack_require__(27);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -1118,11 +1241,11 @@ module.exports = isArrayLike;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(4),
-    isObject = __webpack_require__(0);
+var baseGetTag = __webpack_require__(5),
+    isObject = __webpack_require__(1);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -1161,7 +1284,7 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -1202,7 +1325,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /**
@@ -1237,11 +1360,11 @@ module.exports = isObjectLike;
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(4),
-    isObjectLike = __webpack_require__(26);
+var baseGetTag = __webpack_require__(5),
+    isObjectLike = __webpack_require__(28);
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -1272,10 +1395,10 @@ module.exports = isSymbol;
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toNumber = __webpack_require__(29);
+var toNumber = __webpack_require__(31);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0,
@@ -1320,11 +1443,11 @@ module.exports = toFinite;
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(0),
-    isSymbol = __webpack_require__(27);
+var isObject = __webpack_require__(1),
+    isSymbol = __webpack_require__(29);
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -1392,7 +1515,63 @@ module.exports = toNumber;
 
 
 /***/ }),
-/* 30 */
+/* 32 */
+/***/ (function(module, exports) {
+
+/**
+ * Secure random string generator with custom alphabet.
+ *
+ * Alphabet must contain 256 symbols or less. Otherwise, the generator
+ * will not be secure.
+ *
+ * @param {generator} random The random bytes generator.
+ * @param {string} alphabet Symbols to be used in new random string.
+ * @param {size} size The number of symbols in new random string.
+ *
+ * @return {string} Random string.
+ *
+ * @example
+ * const format = require('nanoid/format')
+ *
+ * function random (size) {
+ *   const result = []
+ *   for (let i = 0; i < size; i++) {
+ *     result.push(randomByte())
+ *   }
+ *   return result
+ * }
+ *
+ * format(random, "abcdef", 5) //=> "fbaef"
+ *
+ * @name format
+ * @function
+ */
+module.exports = function (random, alphabet, size) {
+  var mask = (2 << Math.log(alphabet.length - 1) / Math.LN2) - 1
+  var step = Math.ceil(1.6 * mask * size / alphabet.length)
+
+  var id = ''
+  while (true) {
+    var bytes = random(step)
+    for (var i = 0; i < step; i++) {
+      var byte = bytes[i] & mask
+      if (alphabet[byte]) {
+        id += alphabet[byte]
+        if (id.length === size) return id
+      }
+    }
+  }
+}
+
+/**
+ * @callback generator
+ * @param {number} bytes The number of bytes to generate.
+ * @return {number[]} Random bytes.
+ */
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1489,7 +1668,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1505,7 +1684,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 var printWarning = function() {};
 
 if (process.env.NODE_ENV !== 'production') {
-  var ReactPropTypesSecret = __webpack_require__(2);
+  var ReactPropTypesSecret = __webpack_require__(3);
   var loggedTypeFailures = {};
 
   printWarning = function(text) {
@@ -1585,10 +1764,10 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1601,7 +1780,7 @@ module.exports = checkPropTypes;
 
 
 
-var ReactPropTypesSecret = __webpack_require__(2);
+var ReactPropTypesSecret = __webpack_require__(3);
 
 function emptyFunction() {}
 
@@ -1654,7 +1833,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 33 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1667,10 +1846,10 @@ module.exports = function() {
 
 
 
-var assign = __webpack_require__(30);
+var assign = __webpack_require__(33);
 
-var ReactPropTypesSecret = __webpack_require__(2);
-var checkPropTypes = __webpack_require__(31);
+var ReactPropTypesSecret = __webpack_require__(3);
+var checkPropTypes = __webpack_require__(34);
 
 var printWarning = function() {};
 
@@ -2214,10 +2393,252 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 34 */
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var generate = __webpack_require__(38);
+var alphabet = __webpack_require__(0);
+
+// Ignore all milliseconds before a certain time to reduce the size of the date entropy without sacrificing uniqueness.
+// This number should be updated every year or so to keep the generated id short.
+// To regenerate `new Date() - 0` and bump the version. Always bump the version!
+var REDUCE_TIME = 1459707606518;
+
+// don't change unless we change the algos or REDUCE_TIME
+// must be an integer and less than 16
+var version = 6;
+
+// Counter is used when shortid is called multiple times in one second.
+var counter;
+
+// Remember the last time shortid was called in case counter is needed.
+var previousSeconds;
+
+/**
+ * Generate unique id
+ * Returns string id
+ */
+function build(clusterWorkerId) {
+    var str = '';
+
+    var seconds = Math.floor((Date.now() - REDUCE_TIME) * 0.001);
+
+    if (seconds === previousSeconds) {
+        counter++;
+    } else {
+        counter = 0;
+        previousSeconds = seconds;
+    }
+
+    str = str + generate(version);
+    str = str + generate(clusterWorkerId);
+    if (counter > 0) {
+        str = str + generate(counter);
+    }
+    str = str + generate(seconds);
+    return str;
+}
+
+module.exports = build;
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var alphabet = __webpack_require__(0);
+var random = __webpack_require__(41);
+var format = __webpack_require__(32);
+
+function generate(number) {
+    var loopCounter = 0;
+    var done;
+
+    var str = '';
+
+    while (!done) {
+        str = str + format(random, alphabet.get(), 1);
+        done = number < (Math.pow(16, loopCounter + 1 ) );
+        loopCounter++;
+    }
+    return str;
+}
+
+module.exports = generate;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var alphabet = __webpack_require__(0);
+var build = __webpack_require__(37);
+var isValid = __webpack_require__(40);
+
+// if you are using cluster or multiple servers use this to make each instance
+// has a unique value for worker
+// Note: I don't know if this is automatically set when using third
+// party cluster solutions such as pm2.
+var clusterWorkerId = __webpack_require__(43) || 0;
+
+/**
+ * Set the seed.
+ * Highly recommended if you don't want people to try to figure out your id schema.
+ * exposed as shortid.seed(int)
+ * @param seed Integer value to seed the random alphabet.  ALWAYS USE THE SAME SEED or you might get overlaps.
+ */
+function seed(seedValue) {
+    alphabet.seed(seedValue);
+    return module.exports;
+}
+
+/**
+ * Set the cluster worker or machine id
+ * exposed as shortid.worker(int)
+ * @param workerId worker must be positive integer.  Number less than 16 is recommended.
+ * returns shortid module so it can be chained.
+ */
+function worker(workerId) {
+    clusterWorkerId = workerId;
+    return module.exports;
+}
+
+/**
+ *
+ * sets new characters to use in the alphabet
+ * returns the shuffled alphabet
+ */
+function characters(newCharacters) {
+    if (newCharacters !== undefined) {
+        alphabet.characters(newCharacters);
+    }
+
+    return alphabet.shuffled();
+}
+
+/**
+ * Generate unique id
+ * Returns string id
+ */
+function generate() {
+  return build(clusterWorkerId);
+}
+
+// Export all other functions as properties of the generate function
+module.exports = generate;
+module.exports.generate = generate;
+module.exports.seed = seed;
+module.exports.worker = worker;
+module.exports.characters = characters;
+module.exports.isValid = isValid;
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var alphabet = __webpack_require__(0);
+
+function isShortId(id) {
+    if (!id || typeof id !== 'string' || id.length < 6 ) {
+        return false;
+    }
+
+    var nonAlphabetic = new RegExp('[^' +
+      alphabet.get().replace(/[|\\{}()[\]^$+*?.-]/g, '\\$&') +
+    ']');
+    return !nonAlphabetic.test(id);
+}
+
+module.exports = isShortId;
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var crypto = typeof window === 'object' && (window.crypto || window.msCrypto); // IE 11 uses window.msCrypto
+
+var randomByte;
+
+if (!crypto || !crypto.getRandomValues) {
+    randomByte = function(size) {
+        var bytes = [];
+        for (var i = 0; i < size; i++) {
+            bytes.push(Math.floor(Math.random() * 256));
+        }
+        return bytes;
+    };
+} else {
+    randomByte = function(size) {
+        return crypto.getRandomValues(new Uint8Array(size));
+    };
+}
+
+module.exports = randomByte;
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// Found this seed-based random generator somewhere
+// Based on The Central Randomizer 1.3 (C) 1997 by Paul Houle (houle@msc.cornell.edu)
+
+var seed = 1;
+
+/**
+ * return a random number based on a seed
+ * @param seed
+ * @returns {number}
+ */
+function getNextValue() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed/(233280.0);
+}
+
+function setSeed(_seed_) {
+    seed = _seed_;
+}
+
+module.exports = {
+    nextValue: getNextValue,
+    seed: setSeed
+};
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = 0;
+
+
+/***/ }),
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2286,7 +2707,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(35);
+var	fixUrls = __webpack_require__(45);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -2623,7 +3044,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 35 */
+/* 45 */
 /***/ (function(module, exports) {
 
 
@@ -2718,7 +3139,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 36 */
+/* 46 */
 /***/ (function(module, exports) {
 
 var g;
