@@ -29,6 +29,14 @@ export default class Slider extends React.Component {
         })
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { initialIndex, children } = nextProps;
+        this.setState({
+            count: children ? children.length : 0,
+            index: initialIndex,
+        })
+    }
+
     next() {
         const { index, count } = this.state;
 

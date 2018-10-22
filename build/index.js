@@ -714,6 +714,17 @@ var Slider = function (_React$Component) {
             });
         }
     }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var initialIndex = nextProps.initialIndex,
+                children = nextProps.children;
+
+            this.setState({
+                count: children ? children.length : 0,
+                index: initialIndex
+            });
+        }
+    }, {
         key: 'next',
         value: function next() {
             var _state = this.state,
