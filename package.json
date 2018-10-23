@@ -12,21 +12,34 @@
     "react": "^15.5.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "webpack --watch",
     "build": "webpack"
   },
+  "jest": {
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
+    }
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-core": "^6.24.1",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.5.1",
     "css-loader": "^1.0.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-15": "^1.1.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^23.6.0",
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
     "react": "^15.5.4",
+    "react-dom": "15",
+    "react-test-renderer": "15",
+    "regenerator-runtime": "^0.12.1",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^2.6.1"
